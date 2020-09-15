@@ -25,11 +25,11 @@ def CropPDF(inputFile):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='auto pdfcrop all pdf figures under a given dir')
-    parser.add_argument('-d', metavar='Directory', nargs=1, help='the path of input directory')
-    parser.print_help()
+    # parser.add_argument('-d', metavar='Directory', nargs=1, help='the path of input directory')
+    parser.add_argument("directory", help="the path of the input directory")
     args = parser.parse_args()
-    inputDir = str(args.d[0])
-
+    inputDir = str(args.directory)
+    print(inputDir)
     pdfList = GetAllPDF(inputDir)
     print(pdfList) 
     for pdf in pdfList:
