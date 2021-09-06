@@ -3,23 +3,24 @@
 import argparse
 from os import listdir
 from os import path
-import os 
+from tqdm import tqdm
+import os
 
 def GetAllPDF(dir):
     pdfList = []
-    for file in listdir(dir):
+    for file in tqdm(listdir(dir)):
         if (file.endswith(".pdf")):
             pdfList.append(path.join(dir, file))
     return pdfList
 
 def CropPDF(inputFile):
     cmd = "pdfcrop " + inputFile
-    print(cmd)
+    #print(cmd)
     os.system(cmd)
     cropFileName = inputFile[:-4] + "-crop.pdf"
-    print(cropFileName)
+    #print(cropFileName)
     cmd = "mv " + cropFileName + " " + inputFile
-    print(cmd)
+    #print(cmd)
     os.system(cmd)
 
 
@@ -29,9 +30,9 @@ if __name__ == "__main__":
     parser.add_argument("directory", help="the path of the input directory")
     args = parser.parse_args()
     inputDir = str(args.directory)
-    print(inputDir)
+    #print(inputDir)
     pdfList = GetAllPDF(inputDir)
-    print(pdfList) 
-    for pdf in pdfList:
+    #print(pdfList) 
+    for pdf in tqdm(pdfList):
         CropPDF(pdf)
     print("Done")
