@@ -8,7 +8,7 @@ import os
 
 def GetAllPDF(dir):
     pdfList = []
-    for file in tqdm(listdir(dir)):
+    for file in tqdm(sorted(listdir(dir))):
         if (file.endswith(".pdf")):
             pdfList.append(path.join(dir, file))
     return pdfList
