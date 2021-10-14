@@ -2,6 +2,7 @@
 # auto plot all R-script under a given dir
 import getopt
 import os
+from posix import listdir
 import sys
 
 exector_path = "Rscript"
@@ -24,7 +25,17 @@ def PrintPDF(input_dir: str, output_dir: str):
     for item in directory_content:
         if (item.endswith(".r")):
             full_path = os.path.join(input_dir, item)
-            cmd = exector_path + " " + full_path
+            cmd = "cd " + input_dir + ";"
+            cmd = cmd + exector_path + " " + full_path 
+            print(cmd)
+            os.system(cmd)
+
+    ## move the pdf to the target folder
+    directory_content = sorted(os.listdir(input_dir))
+    for item in directory_content:
+        if (item.endswith(".pdf")):
+            full_path = os.path.join(input_dir, item)
+            cmd = "mv " + full_path + " " + output_dir
             print(cmd)
             os.system(cmd)
 
