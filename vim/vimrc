@@ -7,3 +7,14 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+
+" Turn syntax highlighting on
+syntax on
+
+" Highlight cursor line underneath the cursor horizontally.
+set cursorline
+
+" Highlight cursor line underneath the cursor vertically.
+" set cursorcolumn
+
+:colorscheme molokai
