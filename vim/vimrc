@@ -17,4 +17,8 @@ set cursorline
 " Highlight cursor line underneath the cursor vertically.
 " set cursorcolumn
 
+" the theme
 :colorscheme molokai
+
+" set the background be transparent
+hi Normal guibg=NONE ctermbg=NONE
