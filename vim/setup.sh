@@ -7,6 +7,10 @@ cp molokai.vim ~/.vim/colors/
 echo "Done"
 
 echo "Set up plug.vim"
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+if [ ! -e "$HOME/.vim/autoload/plug.vim" ];then
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else 
+    echo "plug.vim already exists"
+fi
 echo "Done"
