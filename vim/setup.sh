@@ -6,6 +6,8 @@ mkdir -p ~/.vim/colors
 cp molokai.vim ~/.vim/colors/
 echo "Done"
 
+sudo apt-get install exuberant-ctags
+
 echo "Set up plug.vim"
 if [ ! -e "$HOME/.vim/autoload/plug.vim" ];then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \

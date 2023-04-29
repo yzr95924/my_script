@@ -1,4 +1,4 @@
-" BASIC SECTION
+" ==== BASIC SECTION ====
 set showmode
 set showcmd
 set showmatch
@@ -15,6 +15,7 @@ set shiftwidth=4
 set expandtab
 set cursorline
 set history=1000
+filetype on
 filetype plugin indent on
 filetype plugin on
 syntax on
@@ -41,12 +42,24 @@ call plug#begin()
 "    Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
     Plug 'preservim/nerdtree'
     Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+    Plug 'vim-scripts/taglist.vim'
 "    Plug 'tpope/vim-fireplace'
 "    Plug 'rdnetto/YCM-Generator'
 call plug#end()
 " You can revert the settings after the call like so:
 "   filetype indent off   " Disable file-type-specific indentation
 "   syntax off            " Disable syntax highlighting
+
+" ==== LeaderF ====
+let g:Lf_ShortcutF= '<c-p>'
+let g:Lf_WorkingDirectoryMode = 'AF'
+let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
+
+" ==== TagList ====
+let Tlist_Show_One_File = 1
+let Tlist_Exit_OnlyWindow = 1
+let Tlist_Use_Right_Window = 1
+map <silent> <c-h> :Tlist<cr>
 
 "" ============================== VIM-GUTENTAGS
 "" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
