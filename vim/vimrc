@@ -24,14 +24,12 @@ set autoread
 set completeopt=longest,menu
 set laststatus=2
 set nocompatible
-set gcr=n-v-c:ver25-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor
 
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
 call plug#begin()
 " The default plugin directory will be as follows:
 "   - Vim (Linux/macOS): '~/.vim/plugged'
-"   - Avoid using standard Vim directory names like 'plugin'
 "    Plug 'junegunn/vim-easy-align'
 "    Plug 'skywind3000/quickmenu.vim'
 "    Plug 'jiangmiao/auto-pairs'
@@ -41,7 +39,8 @@ call plug#begin()
 "    Plug 'honza/vim-snippets'
 "    Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 "    Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
-"    Plug 'preservim/nerdtree'
+    Plug 'preservim/nerdtree'
+    Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 "    Plug 'tpope/vim-fireplace'
 "    Plug 'rdnetto/YCM-Generator'
 call plug#end()
@@ -72,7 +71,7 @@ call plug#end()
 "" ============================== DONE VIM-GUTENTAGS
 "
 "" ============================== NERDTREE
-"map <C-n> :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
 "autocmd StdinReadPre * let s:std_in=1   " 当不带参数打开Vim时自动加载项目树
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
@@ -103,3 +102,5 @@ call plug#end()
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 "" ============================== DONE
+
+" =============================== For auto-pairs
