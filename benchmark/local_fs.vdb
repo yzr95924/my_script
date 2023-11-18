@@ -1,0 +1,5 @@
+messagescan=yes
+hd=default,vdbench=/home/zuoru/vdbench,user=zuoru
+fsd=fsd1,openflag=directio,depth=2,width=5,files=8,size=256k,shared=no,anchor=/home/zuoru/test_vdbench
+fwd=fwd1,fsd=fsd1,operation=write,xfersize=64k,fileio=sequential,fileselect=sequential,thread=4
+rd=rd1,operation=write,fwd=fwd*,fwdrate=max,warmup=60,elapse=120,format=restart,interval=3
