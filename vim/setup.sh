@@ -6,7 +6,7 @@ mkdir -p ~/.vim/colors
 cp molokai.vim ~/.vim/colors/
 echo "Done"
 
-sudo apt-get install exuberant-ctags
+sudo apt-get install python3-dev exuberant-ctags
 
 echo "Set up plug.vim"
 if [ ! -e "$HOME/.vim/autoload/plug.vim" ];then
