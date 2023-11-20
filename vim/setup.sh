@@ -6,12 +6,12 @@ mkdir -p ~/.vim/colors
 cp molokai.vim ~/.vim/colors/
 echo "Done"
 
-sudo apt-get install python3-dev exuberant-ctags
+sudo apt-get install python2-dev exuberant-ctags
 
 echo "Set up plug.vim"
 if [ ! -e "$HOME/.vim/autoload/plug.vim" ];then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    mkdir -p $HOME/.vim/autoload
+    cp plug.vim $HOME/.vim/autoload
 else 
     echo "plug.vim already exists"
 fi
