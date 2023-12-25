@@ -1,15 +1,18 @@
 return {
-	{
-		"RRethy/nvim-base16",
-		lazy = false,
+	-- {
+	-- 	"RRethy/nvim-base16",
+	-- 	lazy = false,
+    --     config = function()
+    --         vim.cmd([[colorscheme base16-tender]])
+    --     end,
+	-- },
+    {
+        "navarasu/onedark.nvim",
+        lazy = false,
         config = function()
-            vim.cmd([[colorscheme base16-tender]])
+            vim.cmd([[colorscheme onedark]])
         end,
-	},
-    -- {
-    --     "navarasu/onedark.nvim",
-    --     lazy = true,
-    -- },
+    },
 
     -- {
     --     "folke/tokyonight.nvim",

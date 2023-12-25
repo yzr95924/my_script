@@ -1,11 +1,12 @@
 -- vim config
-local set = vim.o
+local set_o = vim.o
+local set_g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
 
-set.number = true
-set.autoread = true
-set.encoding = "utf8"
+set_o.number = true
+set_o.autoread = true
+set_o.encoding = "utf8"
 
 -- Hint: use `:h <option>` to figure out the meaning if needed
 -- vim.opt.clipboard = 'unnamedplus' -- use system clipboard, need x11 forwading
@@ -25,9 +26,16 @@ opt.hlsearch = true -- do not highlight matches
 opt.ignorecase = true -- ignore case in searches by default
 opt.smartcase = true -- but make it case sensitive if an uppercase is entere
 
-vim.g.hardtime_default_on = 1
-vim.g.hardtime_maxcount = 2
-vim.g.hardtime_timeout = 700
+set_g.hardtime_default_on = 1
+set_g.hardtime_maxcount = 2
+set_g.hardtime_timeout = 700
 
 -- cmd config
 -- cmd.colorscheme("base16-tango")
+
+-- disable netrw at the very start of your init.lua
+set_g.loaded_netrw = 1
+set_g.loaded_netrwPlugin = 1
+
+-- set termguicolors to enable highlight groups
+set_g.opt.termguicolors = true
