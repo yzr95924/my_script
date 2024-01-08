@@ -28,7 +28,8 @@ _g_bak_apt_source_path = "/etc/apt/sources.list.bak"
 
 # for centos
 _g_old_yum_repo_path = "/etc/yum.repos.d"
-_g_bak_yum_repo_path = "/etc/yum.repos.d/bak_repo"
+_g_bak_yum_centos_repo_path = "/etc/yum.repos.d/bak_centos"
+_g_bak_yum_epel_repo_path = "/etc/yum.repos.d/bak_epel"
 
 _g_logger = my_logger.get_logger(name=_g_proc_name, is_persist=False)
 _g_cmd_handler = my_cmd_handler.CmdHandler(handler_name=_g_proc_name)
@@ -59,6 +60,8 @@ def clean_yum_repo_rebuild():
         ))
         return returncode
 
+    return returncode
+
 def prepare_apt_source(version: str):
     '''
     prepare the apt source for different ubuntu version
@@ -83,7 +86,7 @@ def prepare_apt_source(version: str):
 
     _g_logger.info("backup old source list")
     if (my_os_util.check_if_file_exits(_g_bak_apt_source_path)):
-        _g_logger.error("old source list backup exist")
+        _g_logger.error("old source list backup exist: {}".format(_g_bak_apt_source_path))
         return errno.EEXIST
 
     cmd = "sudo cp " + _g_old_apt_source_path + " " + _g_bak_apt_source_path
@@ -138,28 +141,32 @@ def prepare_yum_repo(version: str):
     source_file = ""
     cmd = ""
     if (version == "8"):
-        source_file = "centos_8_source"
+        source_file_dir = "centos_8_source"
     else:
         _g_logger.error("cannot find the source for version: {}".format(version))
         return errno.ENOENT
     returncode = 0
+    final_source_path = os.path.join(_g_source_list_lib_path, source_file_dir)
 
-    _g_logger.info("backup old yum repo")
-    if (my_os_util.check_if_file_exits(_g_bak_yum_repo_path)):
-        _g_logger.error("old yum repo backup exist")
+    _g_logger.info("backup old yum centos repo")
+    if (my_os_util.check_if_file_exits(_g_bak_yum_centos_repo_path)):
+        _g_logger.error("old yum repo backup exist: {}, {}".format(
+            _g_bak_yum_centos_repo_path,
+            _g_bak_yum_epel_repo_path))
         return errno.EEXIST
 
-    cmd = "sudo mkdir -p " + _g_bak_yum_repo_path
+    cmd = "sudo mkdir -p " + _g_bak_yum_centos_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        _g_logger.error("create old backup failed: {}".format(
+        _g_logger.error("create old CentOS backup failed: {}".format(
             my_os_util.translate_linux_err_code(returncode)
         ))
         return returncode
 
-    cmd = "sudo mv " + _g_old_yum_repo_path + "/* " + _g_bak_yum_repo_path
+    # cmd = "sudo mv" + " " + _g_old_yum_repo_path + "/CentOS*.repo" + " " + _g_bak_yum_centos_repo_path
+    cmd = "sudo mv" + " " + os.path.join(_g_old_yum_repo_path, "CentOS*.repo") + " " + _g_bak_yum_centos_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
@@ -169,7 +176,7 @@ def prepare_yum_repo(version: str):
         ))
         return returncode
 
-    new_yum_repo_path = os.path.join(_g_source_list_lib_path, source_file)
+    new_yum_repo_path = os.path.join(final_source_path, "CentOS*.repo")
     cmd = "sudo cp " + new_yum_repo_path + " " + _g_old_yum_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
@@ -202,7 +209,18 @@ def prepare_yum_repo(version: str):
         ))
         return returncode
 
-    cmd = "sudo mv " + _g_old_yum_repo_path + "/*epel*.repo" + _g_bak_yum_repo_path
+    #NOTE: assume only the first run can reach here
+    cmd = "sudo mkdir -p " + _g_bak_yum_epel_repo_path
+    _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
+                                                is_dry_run=_g_is_dry_run,
+                                                is_debug=_g_is_debug)
+    if (returncode != 0):
+        _g_logger.error("create old epel backup failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)
+        ))
+        return returncode
+
+    cmd = "sudo mv " + _g_old_yum_repo_path + "/epel*.repo " + _g_bak_yum_epel_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
@@ -212,7 +230,7 @@ def prepare_yum_repo(version: str):
         ))
         return returncode
 
-    new_epel_repo_path = os.path.join(_g_source_list_lib_path, "*epel*.repo")
+    new_epel_repo_path = os.path.join(_g_source_list_lib_path, "epel*.repo")
     cmd = "sudo cp -r " + new_epel_repo_path + " " + _g_old_yum_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
