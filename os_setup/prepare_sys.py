@@ -230,7 +230,7 @@ def prepare_yum_repo(version: str):
         ))
         return returncode
 
-    new_epel_repo_path = os.path.join(_g_source_list_lib_path, "epel*.repo")
+    new_epel_repo_path = os.path.join(final_source_path, "epel*.repo")
     cmd = "sudo cp -r " + new_epel_repo_path + " " + _g_old_yum_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
