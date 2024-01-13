@@ -34,13 +34,15 @@ _g_bak_yum_epel_repo_path = "/etc/yum.repos.d/bak_epel"
 _g_logger = my_logger.get_logger(name=_g_proc_name, is_persist=False)
 _g_cmd_handler = my_cmd_handler.CmdHandler(handler_name=_g_proc_name)
 
+
 def clean_yum_repo_rebuild():
     cmd = "sudo yum clean all"
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "yum clean failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "yum clean failed", returncode)
         return returncode
 
     cmd = "sudo yum makecache"
@@ -53,10 +55,12 @@ def clean_yum_repo_rebuild():
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "yum makecache failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "yum makecache failed", returncode)
         return returncode
 
     return returncode
+
 
 def prepare_apt_source(version: str):
     '''
@@ -76,13 +80,15 @@ def prepare_apt_source(version: str):
     elif (version == "22.04"):
         source_file = "ubuntu_22_04"
     else:
-        _g_logger.error("cannot find the source for version: {}".format(version))
+        _g_logger.error(
+            "cannot find the source for version: {}".format(version))
         return errno.ENOENT
     returncode = 0
 
     _g_logger.info("backup old source list")
     if (my_os_util.check_if_file_exits(_g_bak_apt_source_path)):
-        _g_logger.error("old source list backup exist: {}".format(_g_bak_apt_source_path))
+        _g_logger.error("old source list backup exist: {}".format(
+            _g_bak_apt_source_path))
         return errno.EEXIST
 
     cmd = "sudo cp " + _g_old_apt_source_path + " " + _g_bak_apt_source_path
@@ -90,7 +96,8 @@ def prepare_apt_source(version: str):
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "backup old source list failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "backup old source list failed", returncode)
         return returncode
 
     new_source_list_path = os.path.join(_g_source_list_lib_path, source_file)
@@ -99,7 +106,8 @@ def prepare_apt_source(version: str):
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "replace old source list failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "replace old source list failed", returncode)
         return returncode
 
     cmd = "sudo apt-get update"
@@ -112,10 +120,12 @@ def prepare_apt_source(version: str):
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "execution timed out", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "execution timed out", returncode)
         return returncode
 
     return 0
+
 
 def prepare_yum_repo(version: str):
     '''
@@ -128,12 +138,12 @@ def prepare_yum_repo(version: str):
         < 0 failed, == 0 success
     '''
     _g_logger.info("get yum source for: {}".format(version))
-    source_file = ""
     cmd = ""
     if (version == "8"):
         source_file_dir = "centos_8_source"
     else:
-        _g_logger.error("cannot find the source for version: {}".format(version))
+        _g_logger.error(
+            "cannot find the source for version: {}".format(version))
         return errno.ENOENT
     returncode = 0
     final_source_path = os.path.join(_g_source_list_lib_path, source_file_dir)
@@ -154,25 +164,32 @@ def prepare_yum_repo(version: str):
                                       returncode)
         return returncode
 
-    cmd = "sudo mv" + " " + os.path.join(_g_old_yum_repo_path, "CentOS*.repo") + " " + _g_bak_yum_centos_repo_path
+    cmd = "sudo mv" + " " + \
+        os.path.join(_g_old_yum_repo_path, "CentOS*.repo") + \
+        " " + _g_bak_yum_centos_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "backup old yum repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "backup old yum repo failed", returncode)
         return returncode
 
-    cmd = "sudo cp" + " " + os.path.join(final_source_path, "CentOS*.repo") + " " + _g_old_yum_repo_path
+    cmd = "sudo cp" + " " + \
+        os.path.join(final_source_path, "CentOS*.repo") + \
+        " " + _g_old_yum_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "replace old yum repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "replace old yum repo failed", returncode)
         return returncode
 
     returncode = clean_yum_repo_rebuild()
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "clean and rebuild yum repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "clean and rebuild yum repo failed", returncode)
         return returncode
 
     cmd = "sudo yum --nogpgcheck -y install epel-release"
@@ -185,37 +202,46 @@ def prepare_yum_repo(version: str):
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "execution timed out", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "execution timed out", returncode)
         return returncode
 
-    #NOTE: assume only the first run can reach here
+    # NOTE: assume only the first run can reach here
     cmd = "sudo mkdir -p " + _g_bak_yum_epel_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "create old epel backup failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "create old epel backup failed", returncode)
         return returncode
 
-    cmd = "sudo mv" + " " + os.path.join(_g_old_yum_repo_path, "/epel*.repo") + " " + _g_bak_yum_epel_repo_path
+    cmd = "sudo mv" + " " + \
+        os.path.join(_g_old_yum_repo_path, "/epel*.repo") + \
+        " " + _g_bak_yum_epel_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0 or returncode != errno.EEXIST):
-        my_os_util.log_error_with_ret(_g_logger, "backup old yum epel repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "backup old yum epel repo failed", returncode)
         return returncode
 
-    cmd = "sudo cp -r" + " " + os.path.join(final_source_path, "epel*.repo")+ " " + _g_old_yum_repo_path
+    cmd = "sudo cp -r" + " " + \
+        os.path.join(final_source_path, "epel*.repo") + \
+        " " + _g_old_yum_repo_path
     _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "replace old yum epel repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "replace old yum epel repo failed", returncode)
         return returncode
 
     returncode = clean_yum_repo_rebuild()
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger, "clean and rebuild yum repo failed", returncode)
+        my_os_util.log_error_with_ret(
+            _g_logger, "clean and rebuild yum repo failed", returncode)
         return returncode
 
     return 0
@@ -225,6 +251,7 @@ def usage():
     print("Usage: python3 {} -r -d".format(__file__))
     print("-r (optional): dry run")
     print("-d (optional): debug mode")
+
 
 if __name__ == "__main__":
     short_options = "hrd"
@@ -255,7 +282,8 @@ if __name__ == "__main__":
         _g_logger.error("get os release info failed")
         sys.exit(errno.EIO)
     else:
-        _g_logger.info("get os release: {}, {}".format(os_info["ID"], os_info["VERSION_ID"]))
+        _g_logger.info("get os release: {}, {}".format(
+            os_info["ID"], os_info["VERSION_ID"]))
 
     if os_info["ID"] == "ubuntu":
         ret = prepare_apt_source(os_info["VERSION_ID"])
