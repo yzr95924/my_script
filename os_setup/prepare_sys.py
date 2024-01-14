@@ -5,6 +5,7 @@ set up the os source for different os release
     ubuntu - apt-get source
     centos - yum source, and epel source
     rocky - yum source, and epel source
+    almalinux - yum source, and epel source
 '''
 
 import os
@@ -32,12 +33,29 @@ _g_bak_apt_source_path = "/etc/apt/sources.list.bak"
 
 # for centos & rocky
 _g_old_yum_repo_path = "/etc/yum.repos.d"
-_g_bak_yum_repo_dict = {"centos": "/etc/yum.repos.d/bak_centos",
-                        "rocky": "/etc/yum.repos.d/bak_rocky",
-                        "epel": "/etc/yum.repos.d/bak_epel"}
-_g_yum_file_prefix_dict = {"centos": "CentOS*.repo",
-                            "rocky": "Rocky*.repo",
-                            "epel": "epel*.repo"}
+_g_bak_yum_repo_dict = {
+    "centos": "/etc/yum.repos.d/bak_centos",
+    "rocky": "/etc/yum.repos.d/bak_rocky",
+    "epel": "/etc/yum.repos.d/bak_epel",
+    "almalinux": "/etc/yum.repos.d/bak_alma"
+}
+
+_g_yum_file_prefix_dict = {
+    "centos": "CentOS*.repo",
+    "rocky": "Rocky*.repo",
+    "epel": "epel*.repo",
+    "almalinux": "almalinux*.repo"
+}
+
+_g_new_yum_dir_dict = {
+    "centos": "centos_8_source",
+    "rocky": "rocky_8_source",
+    "almalinux": "alma_8_source"
+}
+
+_g_rocky_support_version = {"8.8"}
+_g_almalinux_support_version = {"8.8"}
+_g_centos_support_version = {"8"}
 
 _g_logger = my_logger.get_logger(name=_g_proc_name, is_persist=False)
 _g_cmd_handler = my_cmd_handler.CmdHandler(handler_name=_g_proc_name)
@@ -49,8 +67,8 @@ def clean_yum_repo_rebuild():
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(
-            _g_logger, "yum clean failed", returncode)
+        _g_logger.error("yum clean failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     cmd = "sudo yum makecache"
@@ -63,8 +81,8 @@ def clean_yum_repo_rebuild():
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(
-            _g_logger, "yum makecache failed", returncode)
+        _g_logger.error("yum makecache failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     return returncode
@@ -91,9 +109,8 @@ def backup_old_source(backup_dir: str, target_prefix: str):
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "create old source backup folder failed",
-                                      returncode)
+        _g_logger.error("create old source backup folder failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     cmd = "sudo mv" + " " + \
@@ -103,9 +120,8 @@ def backup_old_source(backup_dir: str, target_prefix: str):
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "backup old source failed",
-                                      returncode)
+        _g_logger.error("backup old source failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
     return 0
 
@@ -132,9 +148,8 @@ def replace_new_source(source_dir: str, target_prefix: str):
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "replace old yum source failed",
-                                      returncode)
+        _g_logger.error("replace old yum source failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
     return 0
 
@@ -153,9 +168,8 @@ def install_epel():
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "execution timed out",
-                                      returncode)
+        _g_logger.error("execution timed out: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
     return 0
 
@@ -173,22 +187,31 @@ def prepare_yum_and_epel_repo():
     if _g_os_id == "centos":
         _g_logger.info("get centos source for: {}".format(
             _g_os_release_version))
+        if (_g_os_release_version in _g_centos_support_version):
+            source_file_dir = _g_new_yum_dir_dict[_g_os_id]
+        else:
+            _g_logger.error("not support for this version")
+            return errno.ENOENT
     elif _g_os_id == "rocky":
         _g_logger.info("get rocky source for: {}".format(
             _g_os_release_version))
+        if (_g_os_release_version in _g_rocky_support_version):
+            source_file_dir = _g_new_yum_dir_dict[_g_os_id]
+        else:
+            _g_logger.error("not support for this version")
+            return errno.ENOENT
+    elif _g_os_id == "almalinux":
+        _g_logger.info("get almalinux source for: {}".format(
+            _g_os_release_version))
+        if (_g_os_release_version in _g_almalinux_support_version):
+            source_file_dir = _g_new_yum_dir_dict[_g_os_id]
+        else:
+            _g_logger.error("not support for this version")
+            return errno.ENOENT
     else:
         _g_logger.error("not support os release")
-
-    if (_g_os_release_version == "8"):
-        if (_g_os_id == "centos"):
-            source_file_dir = "centos_8_source"
-        elif (_g_os_id == "rocky"):
-            source_file_dir = "rocky_8_source"
-    else:
-        _g_logger.error(
-            "cannot find the source for version: {}".format(
-                _g_os_release_version))
         return errno.ENOENT
+
     returncode = 0
     final_source_path = os.path.join(_g_source_list_lib_path, source_file_dir)
 
@@ -196,61 +219,55 @@ def prepare_yum_and_epel_repo():
     if (my_os_util.check_if_file_exits(_g_bak_yum_repo_dict[_g_os_id])):
         _g_logger.error("old yum repo backup exist: {}, {}".format(
             _g_bak_yum_repo_dict[_g_os_id],
-            _g_bak_epel_repo_path))
+            _g_bak_yum_repo_dict["epel"]))
         return errno.EEXIST
 
     returncode = backup_old_source(_g_bak_yum_repo_dict[_g_os_id],
                                    _g_yum_file_prefix_dict[_g_os_id])
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "backup old {} source failed".format(_g_os_id),
-                                      returncode)
+        _g_logger.error("backup old {} source failed: {}".format(
+            _g_os_id, my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     returncode = replace_new_source(final_source_path,
                                     _g_yum_file_prefix_dict[_g_os_id])
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "replace old {} source failed".format(_g_os_id),
-                                      returncode)
+        _g_logger.error("replace old {} source failed: {}".format(
+            _g_os_id, my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     returncode = clean_yum_repo_rebuild()
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "rebuild {} source failed".format(_g_os_id),
-                                      returncode)
+        _g_logger.error("rebuild {} source failed: {}".format(
+            _g_os_id, my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     returncode = install_epel()
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "install {} epel release failed".format(_g_os_id),
-                                      returncode)
+        _g_logger.error("install {} epel release failed: {}".format(
+            _g_os_id, my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     # NOTE: assume only the first run can reach here
     returncode = backup_old_source(_g_bak_yum_repo_dict["epel"],
                                    _g_yum_file_prefix_dict["epel"])
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "backup old epel source failed",
-                                      returncode)
+        _g_logger.error("backup old epel source failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     returncode = replace_new_source(final_source_path,
                                     _g_yum_file_prefix_dict["epel"])
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "replace old epel source failed",
-                                      returncode)
+        _g_logger.error("replace old epel source failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     returncode = clean_yum_repo_rebuild()
     if (returncode != 0):
-        my_os_util.log_error_with_ret(_g_logger,
-                                      "rebuild {} source failed".format(_g_os_id),
-                                      returncode)
+        _g_logger.error("rebuild {} source failed: {}".format(
+            _g_os_id, my_os_util.translate_linux_err_code(returncode)
+        ))
         return returncode
     return 0
 
@@ -291,8 +308,8 @@ def prepare_ubuntu_source():
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(
-            _g_logger, "backup old source list failed", returncode)
+        _g_logger.error("backup old source list failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     new_source_list_path = os.path.join(_g_source_list_lib_path, source_file)
@@ -301,8 +318,8 @@ def prepare_ubuntu_source():
                                                 is_dry_run=_g_is_dry_run,
                                                 is_debug=_g_is_debug)
     if (returncode != 0):
-        my_os_util.log_error_with_ret(
-            _g_logger, "replace old source list failed", returncode)
+        _g_logger.error("replace old source list failed: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
 
     cmd = "sudo apt-get update"
@@ -315,8 +332,8 @@ def prepare_ubuntu_source():
         _g_logger.error("execution timed out: {}".format(cmd))
         return errno.ETIME
     if (returncode != 0):
-        my_os_util.log_error_with_ret(
-            _g_logger, "execution timed out", returncode)
+        _g_logger.error("execution timed out: {}".format(
+            my_os_util.translate_linux_err_code(returncode)))
         return returncode
     return 0
 
@@ -327,7 +344,9 @@ def usage():
     print("-d (optional): debug mode")
     print("centos: 8")
     print("ubuntu: 22.04")
-    print("rocky: 8")
+    print("rocky: 8.8")
+    print("almalinux: 8.8")
+
 
 if __name__ == "__main__":
     short_options = "hrd"
@@ -366,14 +385,16 @@ if __name__ == "__main__":
         _g_os_release_version = os_info["VERSION_ID"]
         ret = prepare_ubuntu_source()
         if (ret != 0):
-            my_os_util.log_error_with_ret(_g_logger, "update ubuntu source failed", ret)
+            _g_logger.error("update ubuntu source failed: {}".format(
+                my_os_util.translate_linux_err_code(ret)))
             sys.exit(ret)
     elif os_info["ID"] == "centos" or os_info["ID"] == "rocky":
         _g_os_id = os_info["ID"]
         _g_os_release_version = os_info["VERSION_ID"]
         ret = prepare_yum_and_epel_repo()
         if (ret != 0):
-            my_os_util.log_error_with_ret(_g_logger, "update centos source failed", ret)
+            _g_logger.error("update yum and epel failed ({}): {}".format(
+                os_info["ID"], my_os_util.translate_linux_err_code(ret)))
             sys.exit(ret)
     else:
         _g_logger.error("not support os release")
