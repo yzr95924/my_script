@@ -19,6 +19,7 @@ _g_proc_name = "prepare_sys"
 from my_py import logger
 from my_py import cmd_handler
 from my_py import os_util
+from my_py import setup
 
 _g_is_dry_run = False
 _g_is_debug = False
@@ -216,7 +217,7 @@ def prepare_yum_and_epel_repo():
     final_source_path = os.path.join(_g_source_list_lib_path, source_file_dir)
 
     _g_logger.info("backup old yum centos repo")
-    if (os_util.check_if_file_exits(_g_bak_yum_repo_dict[_g_os_id])):
+    if (os_util.FS.check_if_file_exist(_g_bak_yum_repo_dict[_g_os_id])):
         _g_logger.error("old yum repo backup exist: {}, {}".format(
             _g_bak_yum_repo_dict[_g_os_id],
             _g_bak_yum_repo_dict["epel"]))
@@ -298,7 +299,7 @@ def prepare_ubuntu_source():
     returncode = 0
 
     _g_logger.info("backup old source list")
-    if (os_util.check_if_file_exits(_g_bak_apt_source_path)):
+    if (os_util.FS.check_if_file_exist(_g_bak_apt_source_path)):
         _g_logger.error("old source list backup exist: {}".format(
             _g_bak_apt_source_path))
         return errno.EEXIST
@@ -351,8 +352,8 @@ def usage():
 if __name__ == "__main__":
     short_options = "hrd"
     ret = 0
-    os_util.set_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
-                                   is_debug=_g_is_debug)
+    setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
+                                  is_debug=_g_is_debug)
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortopts=short_options)
