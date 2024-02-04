@@ -75,7 +75,7 @@ def usage():
     print("-d (optional): debug mode")
 
 
-def parse_param(opts: tuple[list[tuple[str, str]]]):
+def parse_param(opts):
     global _g_is_debug, _g_is_dry_run
     for opt, arg in opts:
         if (opt == "-h"):
