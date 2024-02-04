@@ -352,9 +352,6 @@ def usage():
 if __name__ == "__main__":
     short_options = "hrd"
     ret = 0
-    setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
-                                  is_debug=_g_is_debug)
-
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortopts=short_options)
     except getopt.GetoptError as err:
@@ -375,15 +372,17 @@ if __name__ == "__main__":
             usage()
             sys.exit(errno.EINVAL)
 
+    setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
+                                  is_debug=_g_is_debug)
     os_info = os_util.get_current_os_release()
-    if os_info is None:
+    if (os_info is None):
         _g_logger.error("get os release info failed")
         sys.exit(errno.EIO)
     else:
         _g_logger.info("get os release: {}, {}".format(
             os_info["ID"], os_info["VERSION_ID"]))
 
-    if os_info["ID"] == "ubuntu":
+    if (os_info["ID"] == "ubuntu"):
         _g_os_id = os_info["ID"]
         _g_os_release_version = os_info["VERSION_ID"]
         ret = prepare_ubuntu_source()
@@ -391,7 +390,7 @@ if __name__ == "__main__":
             _g_logger.error("update ubuntu source failed: {}".format(
                 os_util.translate_linux_err_code(ret)))
             sys.exit(ret)
-    elif os_info["ID"] in _g_new_yum_dir_dict:
+    elif (os_info["ID"] in _g_new_yum_dir_dict):
         _g_os_id = os_info["ID"]
         _g_os_release_version = os_info["VERSION_ID"]
         ret = prepare_yum_and_epel_repo()

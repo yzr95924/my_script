@@ -85,6 +85,14 @@ def dec_key_to_plaintext_dir(enc_private_key_path: str, pwd: str):
             ))
             return ret
 
+    if (not os_util.FS.check_if_file_exist(_g_plaintext_key_dir)):
+        ret = os_util.FS.mkdir_p(_g_plaintext_key_dir)
+        if (ret != 0):
+            _g_logger.error("create dir {} failed: {}".format(
+                _g_plaintext_key_dir, os_util.translate_linux_err_code(ret)
+            ))
+            return ret
+
     key_bytes = crypto_tool.Hasher.cal_sha256_hash(pwd)
     ret = crypto_tool.AESCipher.decrypt_with_key(enc_private_key_path,
                                                  key_bytes,
