@@ -23,11 +23,12 @@ _g_logger = logger.get_logger(name=_g_proc_name)
 _g_cmd_handler = cmd_handler.CmdHandler(handler_name=_g_proc_name)
 
 _g_apt_pkg_list = [
-    "vim", "fish", "byobu", "git",
+    "vim", "fish", "byobu", "git", "clang"
 ]
 _g_yum_pkg_list = [
     "vim", "fish", "byobu", "git",
 ]
+
 
 def install_apt_pkg():
     global _g_logger, _g_cmd_handler
@@ -114,8 +115,7 @@ if __name__ == "__main__":
 
     if (os_info["ID"] == "ubuntu"):
         ret = install_apt_pkg()
-    elif (os_info["ID"] == "rocky" or
-          os_info["ID"] == "almalinux"):
+    elif (os_info["ID"] == "rocky" or os_info["ID"] == "almalinux"):
         ret = install_yum_pkg()
     else:
         _g_logger.error("not support os release")

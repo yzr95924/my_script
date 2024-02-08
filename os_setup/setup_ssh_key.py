@@ -48,7 +48,6 @@ def enc_key_to_cipher_dir(private_key_path: str, pwd: str):
         return ret
     _g_logger.info("enc private key successful: {}".format(out_private_path))
 
-
     public_key_path = private_key_path + ".pub"
     out_public_path = os.path.basename(public_key_path) + ".enc"
     out_public_path = os.path.join(_g_cipher_key_dir, out_public_path)
