@@ -76,19 +76,27 @@ def dec_key_to_plaintext_dir(enc_private_key_path: str, pwd: str):
     out_private_path = os.path.join(_g_plaintext_key_dir, out_private_path)
     _g_logger.info("out private key path: {}".format(out_private_path))
 
-    if (os_util.FS.check_if_file_exist(out_private_path)):
-        ret = os_util.FS.change_file_mode(out_private_path, "600")
-        if (ret != 0):
-            _g_logger.error("change private key mode with write failed: {}".format(
-                os_util.translate_linux_err_code(ret)
-            ))
-            return ret
-
+    # check ~/.ssh exist? --> no, create it with 700 mode
     if (not os_util.FS.check_if_file_exist(_g_plaintext_key_dir)):
         ret = os_util.FS.mkdir_p(_g_plaintext_key_dir)
         if (ret != 0):
             _g_logger.error("create dir {} failed: {}".format(
                 _g_plaintext_key_dir, os_util.translate_linux_err_code(ret)
+            ))
+            return ret
+        ret = os_util.FS.change_file_mode(_g_plaintext_key_dir, "700")
+        if (ret != 0):
+            _g_logger.error("change dir {} mode failed: {}".format(
+                _g_plaintext_key_dir, os_util.translate_linux_err_code(ret)
+            ))
+            return ret
+
+    # Note: check whether the output file exists, if exist --> change it with write mode
+    if (os_util.FS.check_if_file_exist(out_private_path)):
+        ret = os_util.FS.change_file_mode(out_private_path, "600")
+        if (ret != 0):
+            _g_logger.error("change private key mode with write failed: {}".format(
+                os_util.translate_linux_err_code(ret)
             ))
             return ret
 
