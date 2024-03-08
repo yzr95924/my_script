@@ -4,11 +4,10 @@
 mount/umount/format lustre in a single machine
 """
 
-import os
 import getopt
 import sys
 import errno
-import socket
+import concurrent.futures
 
 sys.path.append("../common_include")
 _g_proc_name = "lustre_setup"
@@ -308,7 +307,7 @@ def format_ost_mdt(tgt_type: str, index: int, dev_path: str, mount_opt=""):
         + dev_path
     _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
                                          is_dry_run=_g_is_dry_run,
-                                         is_debug=True,
+                                         is_debug=_g_is_debug,
                                          is_verbose=False)
     if (ret != 0):
         _g_logger.error("format {}: {}, {} failed: {}".format(
@@ -343,7 +342,7 @@ def format_mgt(dev_path: str, mount_opt=""):
 
     _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
                                          is_dry_run=_g_is_dry_run,
-                                         is_debug=True,
+                                         is_debug=_g_is_debug,
                                          is_verbose=False)
 
     if (ret != 0):
@@ -354,7 +353,7 @@ def format_mgt(dev_path: str, mount_opt=""):
 
     ret = os_util.FS.mkdir_p(_g_mgt_mount_point, is_root=True)
     if (ret != 0):
-        _g_logger.error("mkdir ost mount point {} failed: {}".format(
+        _g_logger.error("mkdir mgt mount point {} failed: {}".format(
             _g_mgt_mount_point, os_util.translate_linux_err_code(ret)
         ))
         return ret
@@ -379,13 +378,18 @@ def format_all_mdt_ost_mgt():
                              is_debug=_g_is_debug,
                              is_verbose=True)
 
+    ost_format_future_list = []
+    mdt_format_future_list = []
+    ost_format_executor = concurrent.futures.ThreadPoolExecutor()
+    mdt_format_executor = concurrent.futures.ThreadPoolExecutor()
+    mgt_format_executor = concurrent.futures.ThreadPoolExecutor()
+
     for ost_dev in _g_ost_dev_list:
-        ret = format_ost_mdt("ost", ost_idx, ost_dev)
-        if (ret != 0):
-            _g_logger.error("format ost failed: {}".format(
-                os_util.translate_linux_err_code(ret)
-            ))
-            return ret
+        ost_format_future = ost_format_executor.submit(format_ost_mdt,
+                                                       tgt_type="ost",
+                                                       index=ost_idx,
+                                                       dev_path=ost_dev)
+        ost_format_future_list.append(ost_format_future)
 
         mount_point = _g_ost_mount_point_prefix + "_" + str(ost_idx)
         ret = os_util.FS.mkdir_p(mount_point, is_root=True)
@@ -395,15 +399,13 @@ def format_all_mdt_ost_mgt():
             ))
             return ret
         ost_idx = ost_idx + 1
-    _g_logger.info("format all ost done!")
 
     for mdt_dev in _g_mdt_dev_list:
-        ret = format_ost_mdt("mdt", mdt_idx, mdt_dev)
-        if (ret != 0):
-            _g_logger.error("format mdt failed: {}".format(
-                os_util.translate_linux_err_code(ret)
-            ))
-            return ret
+        mdt_format_future = mdt_format_executor.submit(format_ost_mdt,
+                                                       tgt_type="mdt",
+                                                       index=mdt_idx,
+                                                       dev_path=mdt_dev)
+        mdt_format_future_list.append(mdt_format_future)
 
         mount_point = _g_mdt_mount_point_prefix + "_" + str(mdt_idx)
         ret = os_util.FS.mkdir_p(mount_point, is_root=True)
@@ -413,15 +415,45 @@ def format_all_mdt_ost_mgt():
             ))
             return ret
         mdt_idx = mdt_idx + 1
-    _g_logger.info("format all mdt done!")
 
-    ret = format_mgt(_g_mgt_dev_list[0])
+    mgt_format_future = mgt_format_executor.submit(format_mgt,
+                                                   dev_path=_g_mgt_dev_list[0])
+
+    for ost_ret_idx in range(len(ost_format_future_list)):
+        ret = ost_format_future_list[ost_ret_idx].result()
+        if (ret != 0):
+            _g_logger.error("format ost failed: {}".format(
+                os_util.translate_linux_err_code(ret)
+            ))
+            ost_format_executor.shutdown(wait=False)
+            mdt_format_executor.shutdown(wait=False)
+            mgt_format_executor.shutdown(wait=False)
+            return ret
+    _g_logger.info("format all ost done!")
+    ost_format_executor.shutdown()
+
+    for mdt_ret_idx in range(len(mdt_format_future_list)):
+        ret = mdt_format_future_list[mdt_ret_idx].result()
+        if (ret != 0):
+            _g_logger.error("format mdt failed: {}".format(
+                os_util.translate_linux_err_code(ret)
+            ))
+            mdt_format_executor.shutdown(wait=False)
+            mgt_format_executor.shutdown(wait=False)
+            return ret
+    _g_logger.info("format all mdt done!")
+    mdt_format_executor.shutdown()
+
+    ret = mgt_format_future.result()
     if (ret != 0):
         _g_logger.error("format mgt failed: {}".format(
             os_util.translate_linux_err_code(ret)
         ))
+        mgt_format_executor.shutdown(wait=False)
         return ret
     _g_logger.info("format mgt done!")
+    mgt_format_executor.shutdown()
+
     return 0
 
 
