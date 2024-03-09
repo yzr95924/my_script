@@ -30,7 +30,7 @@ _g_client_mount_point = "/mnt/l_lfs"
 _g_lustre_fs_name = "l_lfs"
 _g_mkfs_cmd = "sudo mkfs.lustre"
 
-_g_ost_dev_list= [
+_g_ost_dev_list = [
     "/dev/nvme0n5",
     "/dev/nvme0n6",
 ]
@@ -63,17 +63,13 @@ def mount_umount_lustre_client(is_mount: bool):
     if (not is_mount):
         cmd = "sudo fuser -k" + " " + _g_client_mount_point
         _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
-                                 is_dry_run=_g_is_dry_run,
-                                 is_debug=_g_is_debug,
-                                 is_verbose=True)
+                                             is_dry_run=_g_is_dry_run,
+                                             is_debug=_g_is_debug,
+                                             is_verbose=True)
         if (ret != 0):
-            if (os_util.FS.is_folder_mount(_g_client_mount_point)):
-                _g_logger.error("kill mount client failed: {}".format(
-                    os_util.translate_linux_err_code(ret)
-                ))
-                return ret
-            else:
-                _g_logger.warning("client not mounted, ignore")
+            _g_logger.warning("fuser return non-zero: {}, ignore".format(
+                os_util.translate_linux_err_code(ret)
+            ))
 
         cmd = "sudo umount -t lustre -l" + " " + _g_client_mount_point
         _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
@@ -177,7 +173,8 @@ def mount_umount_all_ost_mdt_mgt(tgt_type: int, is_mount: bool):
             idx = idx + 1
     elif (tgt_type == "mgt"):
         if (is_mount):
-            cmd = "sudo mount -t lustre" + " " + _g_mgt_dev_list[0] + " " + _g_mgt_mount_point
+            cmd = "sudo mount -t lustre" + " " + \
+                _g_mgt_dev_list[0] + " " + _g_mgt_mount_point
         else:
             cmd = "sudo umount -t lustre -l" + " " + _g_mgt_mount_point
         _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
@@ -266,8 +263,8 @@ def stop_lustre_unload_mod():
     _g_logger.info("start to unload lustre modules")
     cmd = "sudo lustre_rmmod"
     _, _, ret = _g_cmd_handler.run_shell(cmd=cmd,
-                             is_dry_run=_g_is_dry_run,
-                             is_debug=_g_is_debug)
+                                         is_dry_run=_g_is_dry_run,
+                                         is_debug=_g_is_debug)
     if (ret != 0):
         _g_logger.error("unload lustre modules failed: {}".format(
             os_util.translate_linux_err_code(ret)
