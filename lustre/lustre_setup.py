@@ -30,25 +30,18 @@ _g_client_mount_point = "/mnt/l_lfs"
 _g_lustre_fs_name = "l_lfs"
 _g_mkfs_cmd = "sudo mkfs.lustre"
 
-_g_ost_dev_list = [
-    "/dev/nvme0n5",
-    "/dev/nvme0n6",
-]
-_g_mdt_dev_list = [
-    "/dev/nvme0n3",
-    "/dev/nvme0n4",
-]
-_g_mgt_dev_list = [
-    "/dev/nvme0n2",
-]
+_g_ost_dev_list = []
+_g_mdt_dev_list = []
+_g_mgt_dev_list = []
 
 
 def usage():
-    print("Usage: python3 {} -r -d -u".format(_g_proc_name))
+    print("Usage: python3 {} -r -d -u -i $\{config_path\}".format(_g_proc_name))
     print("-r (optional): dry run")
     print("-d (optional): debug mode")
     print("-u (optional): umount mode")
     print("-f (optional): reformat mode")
+    print("-i (optional): config path")
 
 
 def mount_umount_lustre_client(is_mount: bool):
@@ -455,15 +448,16 @@ def format_all_mdt_ost_mgt():
 
 
 if __name__ == "__main__":
-    short_options = "rdhuf"
+    short_options = "i:rdhuf"
     ret = 0
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortopts=short_options)
-    except getopt.GetoptError as err:
+    except Exception as err:
         _g_logger.error(str(err))
         sys.exit(errno.EINVAL)
 
+    config_path = ""
     for opt, arg in opts:
         if (opt == "-h"):
             usage()
@@ -476,12 +470,21 @@ if __name__ == "__main__":
             _g_is_umount = True
         elif (opt == "-f"):
             _g_is_format = True
+        elif (opt == "-i"):
+            json_config = os_util.Config.load_json_config(arg)
+            _g_mgt_dev_list = json_config["mgt"]
+            _g_mdt_dev_list = json_config["mdt"]
+            _g_ost_dev_list = json_config["ost"]
         else:
             _g_logger.error("wrong opt")
             usage()
             sys.exit(errno.EINVAL)
     setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
                                   is_debug=_g_is_debug)
+
+    if (len(_g_mgt_dev_list) == 0):
+        _g_logger.error("do not input config file")
+        sys.exit(errno.EINVAL)
 
     if (_g_is_format):
         _g_logger.info("start to format lustre")
