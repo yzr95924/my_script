@@ -1,5 +1,13 @@
 {
-    "mgt": ["/dev/nvme0n2"],
-    "mdt": ["/dev/nvme0n3", "/dev/nvme0n4"],
-    "ost": ["/dev/nvme0n5", "/dev/nvme0n6"]
+    "mgt": [
+        "/dev/nvme0n2"
+    ],
+    "mdt": [
+        "/dev/nvme0n3",
+        "/dev/nvme0n4"
+    ],
+    "ost": [
+        "/dev/nvme0n5",
+        "/dev/nvme0n6"
+    ]
 }
