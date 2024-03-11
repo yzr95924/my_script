@@ -36,7 +36,7 @@ _g_mgt_dev_list = []
 
 
 def usage():
-    print("Usage: python3 {} -r -d -u -i $\{config_path\}".format(_g_proc_name))
+    print("Usage: python3 {} -r -d -u -i config_path".format(_g_proc_name))
     print("-r (optional): dry run")
     print("-d (optional): debug mode")
     print("-u (optional): umount mode")
