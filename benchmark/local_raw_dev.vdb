@@ -1,3 +1,11 @@
-sd=sd1,lun=/dev/nvme0n1,openflag=o_direct
-wd=wd1,sd=sd1,seekpct=0,rdpct=0,xfersize=1M
-rd=rd1,wd=wd1,iorate=max,warmup=60,elapsed=600,interval=2
+messagescan=no
+hd=default,user=root,shell=ssh,vdbench=/root/vdbench
+hd=hd1,system=rocky8-build-206
+
+sd=default,openflag=o_direct,thread=8
+sd=sd1,lun=/dev/nvme0n6
+
+wd=default,xfersize=1m,seekpct=100,rdpct=0
+wd=wd1,sd=sd1,hd=hd1
+
+rd=rd1,wd=wd*,iorate=max,warmup=20,elapsed=300,interval=2

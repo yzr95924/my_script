@@ -31,7 +31,7 @@ def usage():
     print("Usage: python3 {} -r -d -f func_name".format(_g_proc_name))
     print("-r (optional): dry run")
     print("-d (optional): debug mode")
-    print("-f : function name")
+    print("-f: function name")
 
 
 def set_tracing_opt(opt: str, val: str):

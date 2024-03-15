@@ -1,5 +1,11 @@
-messagescan=yes
-hd=default,vdbench=/home/zuoru/vdbench,user=zuoru
-fsd=fsd1,openflag=directio,depth=2,width=5,files=8,size=256k,shared=no,anchor=/home/zuoru/test_vdbench
-fwd=fwd1,fsd=fsd1,operation=write,xfersize=64k,fileio=sequential,fileselect=sequential,thread=4
-rd=rd1,operation=write,fwd=fwd*,fwdrate=max,warmup=60,elapse=120,format=restart,interval=3
+messagescan=no
+hd=default,user=root,shell=ssh,vdbench=/root/vdbench
+hd=hd1,system=rocky8-build-206
+
+fsd=default,depth=1,width=2,files=20,size=128m,shared=no,openflag=o_direct
+fsd=fsd1,anchor=/mnt/l_lfs/vdbench
+
+fwd=default,operation=write,xfersize=1m,fileio=sequential,fileselect=sequential,thread=4
+fwd=fwd1,fsd=fsd1,hd=hd1
+
+rd=rd1,fwd=fwd*,fwdrate=max,warmup=20,elapse=300,format=restart,interval=2
