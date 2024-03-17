@@ -2,7 +2,7 @@ messagescan=no
 hd=default,user=root,shell=ssh,vdbench=/root/vdbench
 hd=hd1,system=rocky8-build-206
 
-fsd=default,depth=1,width=2,files=20,size=128m,shared=no,openflag=o_direct
+fsd=default,depth=1,width=2,files=40,size=64m,shared=no,openflag=o_direct
 fsd=fsd1,anchor=/mnt/l_lfs/vdbench
 
 fwd=default,operation=write,xfersize=1m,fileio=sequential,fileselect=sequential,thread=4

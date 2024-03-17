@@ -35,6 +35,7 @@ def usage():
     print("-d (optional): debug mode")
     print("-i: input dev name")
     print("-t (optional): during time")
+    print("Note: recommend to use blktrace's latest version: git://git.kernel.dk/blktrace.git")
 
 
 def start_blk_trace(during_time=90):
