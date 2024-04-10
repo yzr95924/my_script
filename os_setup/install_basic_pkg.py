@@ -23,10 +23,10 @@ _g_logger = logger.get_logger(name=_g_proc_name)
 _g_cmd_handler = cmd_handler.CmdHandler(handler_name=_g_proc_name)
 
 _g_apt_pkg_list = [
-    "vim", "fish", "byobu", "git", "clang"
+    "vim", "fish", "byobu", "git", "clang", "htop",
 ]
 _g_yum_pkg_list = [
-    "vim", "fish", "byobu", "git",
+    "vim", "fish", "byobu", "git", "clang", "htop",
 ]
 
 

@@ -198,6 +198,7 @@ if __name__ == "__main__":
 
     if (len(required_list) > 0):
         _g_logger.error("missing required parameter {}".format(required_list))
+        usage()
         sys.exit(errno.EINVAL)
 
     if (is_enc_mode):
