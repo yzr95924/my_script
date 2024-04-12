@@ -86,16 +86,11 @@ def start_to_perf(pid_list: list):
     _, _, ret_code = _g_cmd_handler.run_shell(cmd=cmd,
                                               is_dry_run=_g_is_dry_run,
                                               is_debug=_g_is_debug)
-    if (ret_code == -2 or ret_code == 124):
-        _g_logger.warning("ignore interrupt perf record error")
-        ret_code = 0
 
     if (ret_code != 0):
-        _g_logger.error("perf record failed: {}".format(
+        _g_logger.warning("perf record failed: {}, ignore it".format(
             os_util.translate_linux_err_code(ret_code)
         ))
-        cmd_handler.remove_keyboard_interrupt()
-        return ret_code
 
     _g_logger.info("collect perf record data done")
     cmd_handler.remove_keyboard_interrupt()
@@ -143,7 +138,7 @@ def param_check():
     if (_g_monitor_freq <= 0):
         _g_logger.error("freq is invalid: {}".format(_g_monitor_freq))
         sys.exit(errno.EINVAL)
-    if (_g_perf_duration <= 0):
+    if (_g_perf_duration < 0):
         _g_logger.error("perf duration is invalid: {}".format(_g_perf_duration))
         sys.exit(errno.EINVAL)
 
