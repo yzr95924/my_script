@@ -7,7 +7,7 @@ import errno
 import os
 
 sys.path.append("../common_include")
-_g_proc_name = "perf_flame_wrapper"
+_g_proc_name = "on_cpu_perf_flame_wrapper"
 
 from my_py import logger
 from my_py import setup
