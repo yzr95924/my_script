@@ -27,6 +27,7 @@ _g_apt_pkg_list = [
 ]
 _g_yum_pkg_list = [
     "vim", "fish", "byobu", "git", "clang", "htop",
+    "the_silver_searcher"
 ]
 
 
@@ -105,6 +106,10 @@ if __name__ == "__main__":
 
     setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
                                   is_debug=_g_is_debug)
+    if (not os_util.Permission.is_current_root()):
+        _g_logger.error("need to run this with root permission")
+        sys.exit(errno.EPERM)
+
     os_info = os_util.get_current_os_release()
     if (os_info is None):
         _g_logger.error("get os release info failed")

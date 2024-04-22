@@ -75,7 +75,6 @@ def clean_yum_repo_rebuild():
     cmd = "sudo yum makecache"
     try:
         _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
-                                                    timeout=30,
                                                     is_dry_run=_g_is_dry_run,
                                                     is_debug=_g_is_debug)
     except TimeoutError:
@@ -326,7 +325,6 @@ def prepare_ubuntu_source():
     cmd = "sudo apt-get update"
     try:
         _, _, returncode = _g_cmd_handler.run_shell(cmd=cmd,
-                                                    timeout=30,
                                                     is_dry_run=_g_is_dry_run,
                                                     is_debug=_g_is_debug)
     except TimeoutError:
@@ -374,6 +372,10 @@ if __name__ == "__main__":
 
     setup.init_dry_run_debug_flag(is_dry_run=_g_is_dry_run,
                                   is_debug=_g_is_debug)
+    if (not os_util.Permission.is_current_root()):
+        _g_logger.error("need to run this with root permission")
+        sys.exit(errno.EPERM)
+
     os_info = os_util.get_current_os_release()
     if (os_info is None):
         _g_logger.error("get os release info failed")
