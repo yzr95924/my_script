@@ -11,13 +11,16 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- After installation, run `checkhealth lazy` to see if everything goes right
+
 require("lazy").setup({
+    -- LSP manager
+    {
+        'neoclide/coc.nvim',
+        branch = 'release'
+    },
     -- Colorscheme
     {
-        -- 'uloco/bluloco.nvim',
-        -- lazy = false,
-        -- priority = 1000,
-        -- dependencies = { 'rktjmp/lush.nvim' },
-        'rebelot/kanagawa.nvim'
-    }
+        'rebelot/kanagawa.nvim',
+    },
 })

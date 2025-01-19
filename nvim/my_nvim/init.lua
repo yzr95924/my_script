@@ -6,3 +6,6 @@ require('plugins')
 
 -- for colorscheme
 require('colorscheme')
+
+-- Setup LSP
+-- require('lsp')
