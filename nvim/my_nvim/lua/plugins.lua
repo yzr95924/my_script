@@ -25,6 +25,35 @@ require("lazy").setup({
     },
     {
         'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require('config.nvim-treesitter')
+        end,
         run = ':TSUpdate'
-    }
+    },
+    -- fuzzy finder
+    {
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.8',
+    },
+    -- bar
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        options = {
+            icons_enabled = false,
+        }
+    },
+    -- file explore
+--     {
+--         return {
+--   "nvim-tree/nvim-tree.lua",
+--   version = "*",
+--   lazy = false,
+--   dependencies = {
+--     "nvim-tree/nvim-web-devicons",
+--   },
+--   config = function()
+--     require("nvim-tree").setup {}
+--   end,
+-- }
 })

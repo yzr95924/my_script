@@ -7,3 +7,6 @@ rm -rf ~/.local/share/nvim
 
 echo "replace my nvim option"
 cp -r ./my_nvim ~/.config/nvim
+
+
+cp ./coc-settings.json ~/.config/nvim/coc-settings.json

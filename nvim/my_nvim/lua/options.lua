@@ -14,3 +14,7 @@ vim.opt.incsearch = true -- search as characters are entered
 vim.opt.hlsearch = true -- hightlight matches
 vim.opt.ignorecase = true -- ignore case in searches by default
 vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entered
+
+-- line
+vim.opt.number = true -- show line number
+vim.opt.cursorline = true -- highlight the line of current cursor
