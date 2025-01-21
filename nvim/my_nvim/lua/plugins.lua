@@ -17,11 +17,14 @@ require("lazy").setup({
     -- LSP manager
     {
         'neoclide/coc.nvim',
-        branch = 'release'
+        branch = 'release',
+        lazy = false,
+        run = ':CocInstall coc-clangd' -- install clangd
     },
     -- Colorscheme
     {
         'rebelot/kanagawa.nvim',
+        lazy = false,
     },
     {
         'nvim-treesitter/nvim-treesitter',
@@ -35,25 +38,15 @@ require("lazy").setup({
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
     },
-    -- bar
+    -- file explorer
     {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        options = {
-            icons_enabled = false,
-        }
+        "nvim-tree/nvim-tree.lua",
+        lazy = false,
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require('config.nvim-tree')
+        end,
     },
-    -- file explore
---     {
---         return {
---   "nvim-tree/nvim-tree.lua",
---   version = "*",
---   lazy = false,
---   dependencies = {
---     "nvim-tree/nvim-web-devicons",
---   },
---   config = function()
---     require("nvim-tree").setup {}
---   end,
--- }
 })

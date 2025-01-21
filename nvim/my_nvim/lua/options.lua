@@ -18,3 +18,7 @@ vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entere
 -- line
 vim.opt.number = true -- show line number
 vim.opt.cursorline = true -- highlight the line of current cursor
+
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
