@@ -14,10 +14,29 @@ vim.opt.rtp:prepend(lazypath)
 -- After installation, run `checkhealth lazy` to see if everything goes right
 
 require("lazy").setup({
+    {
+        'folke/which-key.nvim',
+        event = "VeryLazy",
+        keys = {
+        {
+          "<leader>?",
+          function()
+            require("which-key").show({ global = false })
+          end,
+          desc = "Buffer Local Keymaps (which-key)",
+        },
+        config = function()
+            require('config.which-key')
+        end,
+  },
+    },
     -- LSP manager
     {
         'neoclide/coc.nvim',
         branch = 'release',
+        config = function()
+            require('config.coc')
+        end,
         lazy = false,
         run = ':CocInstall coc-clangd' -- install clangd
     },

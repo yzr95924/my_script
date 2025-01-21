@@ -2,6 +2,7 @@
 vim.opt.clipboard = 'unnamedplus' -- use system clipboard
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.mouse = 'a' -- allow the mouse to be used in Nvim
+vim.opt.syntax = 'on'
 
 -- Tab
 vim.opt.tabstop = 4 -- number of visual spaces per TAB
@@ -19,6 +20,8 @@ vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entere
 vim.opt.number = true -- show line number
 vim.opt.cursorline = true -- highlight the line of current cursor
 
+-- global setting
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.mapleader = ","
