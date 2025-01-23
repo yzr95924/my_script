@@ -1,9 +1,9 @@
 {
-  "clangd.enabled": true,
-  "clangd.path": "/usr/bin/clangd",
-  "clangd.arguments": [
-    "--background-index",
-    "--clang-tidy",
-    "-j=8"
-  ]
-} 
+    "clangd.enabled": true,
+    "clangd.path": "/usr/bin/clangd",
+    "clangd.arguments": [
+      "--background-index",
+      "--clang-tidy",
+      "-j=8"
+    ]
+}
