@@ -43,20 +43,25 @@ local setup = {
 -- define key mapping
 local keys = {
     {
-        "<leader>fg",
-        "<cmd>Telescope live_grep<cr>",
-        group = "Telescope",
-        desc = "Live grep",
-        noremap = true,
-        mode = "n",
+        -- for Telescope
+        {"<leader>t", group = "Telescope"},
+        {"<leader>tf", "<cmd>Telescope find_files<cr>", desc = "Find Files", noremap = true},
+        {"<leader>tg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep", noremap = true},
+        {"<leader>tc", "<cmd>Telescope commands<cr>", desc = "List Commands", noremap = true},
+        {"<leader>tb", "<cmd>Telescope buffers<cr>", desc = "List Buffer", noremap = true},
     },
     {
-        "<leader>ff",
-        "<cmd>Telescope find_files<cr>",
-        group = "Telescope",
-        desc = "Telescope Find file",
-        noremap = true,
-        mode = "n",
+        -- for Bufferline
+        {"<leader>b", group = "Bufferline"},
+        {"<leader>bn", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer", noremap = true},
+        {"<leader>bp", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer", noremap = true},
+        {"<leader>bs", "<cmd>BufferLinePick<cr>", desc = "Pick Buffer", noremap = true},
+        {"<leader>bc", "<cmd>BufferLinePickClose<cr>", desc = "Close Buffer", noremap = true},
+    },
+    {
+        -- for Coc
+        {"<leader>c", group = "Coc"},
+        {"<leader>co", "<cmd>CocOutline<cr>", desc = "Show Outline", noremap = true},
     },
 }
 

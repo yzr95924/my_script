@@ -1,6 +1,7 @@
 return {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
+    version = "*",
     config = function()
         -- Customize Treesitter
         require('nvim-treesitter.configs').setup {

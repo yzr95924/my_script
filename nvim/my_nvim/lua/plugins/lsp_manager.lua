@@ -2,6 +2,7 @@ return {
     -- https://github.com/neoclide/coc.nvim
     "neoclide/coc.nvim",
     branch = "release",
+    version = "*",
     config = function()
         -- https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.lua
 

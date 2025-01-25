@@ -1,6 +1,10 @@
 return {
     -- https://github.com/folke/which-key.nvim
     "folke/which-key.nvim",
+    dependencies = {
+        "echasnovski/mini.icons",
+    },
+    version = "*",
     event = "VeryLazy",
     keys = {
         {
