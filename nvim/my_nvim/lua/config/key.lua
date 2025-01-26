@@ -60,9 +60,17 @@ local keys = {
     },
     {
         -- for Coc
-        {"<leader>c", group = "Coc"},
-        {"<leader>co", "<cmd>CocOutline<cr>", desc = "Show Outline", noremap = true},
+        {"<leader>p", group = "Coc"},
+        {"<leader>pl", "<cmd>CocOutline<cr>", desc = "List Outline", noremap = true},
+        {"<leader>pi", "<cmd>CocCommand document.showIncomingCalls<cr>", desc = "Show Incoming Calls", noremap = true},
+        {"<leader>po", "<cmd>CocCommand document.showOutgoingCalls<cr>", desc = "Show Outgoing Calls", noremap = true},
     },
+    {
+        -- for NvimTree
+        {"<leader>nt", group = "NvimTree"},
+        {"<leader>nto", "<cmd>NvimTreeToggle<cr>", desc = "Toggle Tree", noremap = true},
+        {"<leader>ntc", "<cmd>NvimTreeCollapse<cr>", desc = "Toggle Tree Collapse", noremap = true},
+    }
 }
 
 -- register the key mapping

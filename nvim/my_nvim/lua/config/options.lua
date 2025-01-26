@@ -39,5 +39,5 @@ o.encoding = "UTF-8"
 -- disable netrw at the very start of your init.lua (for nvim-tree)
 global.loaded_netrw = 1
 global.loaded_netrwPlugin = 1
-global.mapleader = " " -- use "space" as the leader key
+global.mapleader = "," -- use "space" as the leader key
 global.maplocalleader = "\\"
