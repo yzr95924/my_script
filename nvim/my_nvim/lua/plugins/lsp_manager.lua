@@ -81,12 +81,6 @@ return {
         -- Symbol renaming
         keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
 
-
-        -- Formatting selected code
-        keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
-        keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
-
-
         -- Setup formatexpr specified filetype(s)
         vim.api.nvim_create_autocmd("FileType", {
             group = "CocGroup",
@@ -115,11 +109,6 @@ return {
         keyset("n", "<leader>as", "<Plug>(coc-codeaction-source)", opts)
         -- Apply the most preferred quickfix action on the current line.
         keyset("n", "<leader>qf", "<Plug>(coc-fix-current)", opts)
-
-        -- Remap keys for apply refactor code actions.
-        keyset("n", "<leader>re", "<Plug>(coc-codeaction-refactor)", { silent = true })
-        keyset("x", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
-        keyset("n", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
 
         -- Run the Code Lens actions on the current line
         keyset("n", "<leader>cl", "<Plug>(coc-codelens-action)", opts)
@@ -178,10 +167,6 @@ return {
         keyset("n", "<space>a", ":<C-u>CocList diagnostics<cr>", opts)
         -- Manage extensions
         keyset("n", "<space>e", ":<C-u>CocList extensions<cr>", opts)
-        -- Show commands
-        keyset("n", "<space>c", ":<C-u>CocList commands<cr>", opts)
-        -- Find symbol of current document
-        keyset("n", "<space>o", ":<C-u>CocList outline<cr>", opts)
         -- Search workspace symbols
         keyset("n", "<space>s", ":<C-u>CocList -I symbols<cr>", opts)
         -- Do default action for next item

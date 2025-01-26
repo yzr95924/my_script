@@ -9,11 +9,47 @@ return {
 	    config = function()
 	    	require("lualine").setup(
                 {
+                    options = {
+			            icons_enabled = true,
+			            theme = vim.g.hardhacker_lualine_theme,
+			            component_separators = "",
+			            disabled_filetypes = {
+				            statusline = {},
+				            winbar = {},
+			            },
+			            ignore_focus = {},
+			            always_divide_middle = true,
+			            globalstatus = true,
+			            refresh = {
+			                statusline = 1000,
+			                tabline = 1000,
+			                winbar = 1000,
+			            },
+		            },
                     sections = {
+                        lualine_b = {
+				            { "branch" },
+				            { "diff" },
+			            },
                         lualine_c = {
-                            {"filename", path = 1}
-                        }
-                    }
+                            {
+                                "filename",
+                                file_status = true, -- Displays file status (readonly status, modified status)
+					            newfile_status = false, -- Display new file status (new file means no write after created)
+                                path = 1,
+                                symbols = {
+						            modified = "[+]", -- Text to show when the file is modified.
+						            readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
+						            unnamed = "[No Name]", -- Text to show for unnamed buffers.
+						            newfile = "[New]", -- Text to show for newly created file before first write
+					            },
+                            }
+                        },
+                    },
+                    tabline = {},
+		            winbar = {},
+		            inactive_winbar = {},
+		            extensions = {},
                 }
             )
 	    end,

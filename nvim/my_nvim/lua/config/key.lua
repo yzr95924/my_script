@@ -37,6 +37,7 @@ local setup = {
         spacing = 3, -- spacing between columns
         align = "left", -- align columns left, center or right
     },
+    timeout = false
     -- triggers = {"<leader>"} -- or specify a list manually
 }
 
@@ -44,11 +45,11 @@ local setup = {
 local keys = {
     {
         -- for Telescope
-        {"<leader>t", group = "Telescope"},
-        {"<leader>tf", "<cmd>Telescope find_files<cr>", desc = "Find Files", noremap = true},
-        {"<leader>tg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep", noremap = true},
-        {"<leader>tc", "<cmd>Telescope commands<cr>", desc = "List Commands", noremap = true},
-        {"<leader>tb", "<cmd>Telescope buffers<cr>", desc = "List Buffer", noremap = true},
+        {"<leader>f", group = "Telescope"},
+        {"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files", noremap = true},
+        {"<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep", noremap = true},
+        {"<leader>fc", "<cmd>Telescope commands<cr>", desc = "List Commands", noremap = true},
+        {"<leader>fb", "<cmd>Telescope buffers<cr>", desc = "List Buffer", noremap = true},
     },
     {
         -- for Bufferline
@@ -59,17 +60,31 @@ local keys = {
         {"<leader>bc", "<cmd>BufferLinePickClose<cr>", desc = "Close Buffer", noremap = true},
     },
     {
-        -- for Coc
-        {"<leader>p", group = "Coc"},
-        {"<leader>pl", "<cmd>CocOutline<cr>", desc = "List Outline", noremap = true},
-        {"<leader>pi", "<cmd>CocCommand document.showIncomingCalls<cr>", desc = "Show Incoming Calls", noremap = true},
-        {"<leader>po", "<cmd>CocCommand document.showOutgoingCalls<cr>", desc = "Show Outgoing Calls", noremap = true},
+        -- for Lsp Coc
+        {"<leader>l", group = "Lsp Coc"},
+        {"<leader>ll", "<cmd>CocOutline<cr>", desc = "List Outline", noremap = true},
+        {"<leader>li", "<cmd>CocCommand document.showIncomingCalls<cr>", desc = "Show Incoming Calls", noremap = true},
+        {"<leader>lo", "<cmd>CocCommand document.showOutgoingCalls<cr>", desc = "Show Outgoing Calls", noremap = true},
+        -- Formatting selected code
+        {"<leader>lf", "<Plug>(coc-format-selected)", desc = "Format Selected Code", noremap = true, mode = {"n", "x"}},
+        -- Remap keys for apply refactor code actions.
+        {"<leader>le", "<Plug>(coc-codeaction-refactor)", desc = "Refactor", noremap = true, mode = {"n"}},
+        {"<leader>lr", "<Plug>(coc-codeaction-refactor-selected)", desc = "Refactor Selected Code", noremap = true, mode = {"n", "x"}},
+        {"<leader>lc", "<C-U><cmd>CocList commands<cr>", desc = "Show Commands", noremap = true, nowait = true, mode = {"n"}},
+        {"<leader>ls", "<C-U><cmd>CocList outline<cr>", desc = "List Symbol", noremap = true, nowait = true, mode = {"n"}},
     },
     {
         -- for NvimTree
-        {"<leader>nt", group = "NvimTree"},
-        {"<leader>nto", "<cmd>NvimTreeToggle<cr>", desc = "Toggle Tree", noremap = true},
-        {"<leader>ntc", "<cmd>NvimTreeCollapse<cr>", desc = "Toggle Tree Collapse", noremap = true},
+        {"<leader>n", group = "NvimTree"},
+        {"<leader>no", "<C-U><cmd>NvimTreeToggle<cr>", desc = "Toggle Tree", noremap = true, nowait = true},
+        {"<leader>nc", "<C-U><cmd>NvimTreeCollapse<cr>", desc = "Toggle Tree Collapse", noremap = true, nowait = true},
+    },
+    {
+        -- for Git
+        {"<leader>g", group = "Git Tool"},
+        {"<leader>gd", "<C-U><cmd>DiffviewOpen HEAD<cr>", desc = "HEAD Diff Open", noremap = true, nowait = true},
+        {"<leader>gc", "<C-U><cmd>DiffviewClose<cr>", desc = "Diff Close", noremap = true, nowait = true},
+        {"<leader>gh", "<C-U><cmd>DiffviewFileHistory %<cr>", desc = "Show File History", noremap = true, nowait = true},
     }
 }
 
