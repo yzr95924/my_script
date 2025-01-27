@@ -7,8 +7,8 @@ o.completeopt = { "menu", "menuone", "noselect" }
 -- 补全菜单将始终显示，无论有多少个候选项。
 -- 用户可以看到所有可用的补全项，并进行选择。
 -- 用户需要手动选择候选项，而不是自动选择第一个选项，从而提供更好的控制。
-o.mouse = 'a' -- allow the mouse to be used in Nvim
-o.syntax = 'on' -- setup syntax
+o.mouse = "" -- allow the mouse to be used in Nvim
+o.syntax = "on" -- setup syntax
 
 -- Tab
 o.tabstop = 4 -- number of visual spaces per TAB

@@ -20,4 +20,17 @@ return {
             })
         end
     },
+    {
+        "chentoast/marks.nvim",
+        version = "*",
+        config = function()
+            require("marks").setup({
+                default_mappings = false,
+                builtin_marks = {
+                    "$##$",
+                },
+                refresh_interval = 250,
+            })
+        end
+    }
 }
