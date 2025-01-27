@@ -48,13 +48,6 @@ return {
         keyset("n", "[g", "<Plug>(coc-diagnostic-prev)", {silent = true})
         keyset("n", "]g", "<Plug>(coc-diagnostic-next)", {silent = true})
 
-        -- GoTo code navigation
-        keyset("n", "gd", "<Plug>(coc-definition)", {silent = true})
-        keyset("n", "gy", "<Plug>(coc-type-definition)", {silent = true})
-        keyset("n", "gi", "<Plug>(coc-implementation)", {silent = true})
-        keyset("n", "gr", "<Plug>(coc-references)", {silent = true})
-
-
         -- Use K to show documentation in preview window
         function _G.show_docs()
             local cw = vim.fn.expand('<cword>')
@@ -68,7 +61,6 @@ return {
         end
         keyset("n", "K", '<CMD>lua _G.show_docs()<CR>', {silent = true})
 
-
         -- Highlight the symbol and its references on a CursorHold event(cursor is idle)
         vim.api.nvim_create_augroup("CocGroup", {})
         vim.api.nvim_create_autocmd("CursorHold", {
@@ -76,7 +68,6 @@ return {
             command = "silent call CocActionAsync('highlight')",
             desc = "Highlight symbol under cursor on CursorHold"
         })
-
 
         -- Symbol renaming
         keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
@@ -113,7 +104,6 @@ return {
         -- Run the Code Lens actions on the current line
         keyset("n", "<leader>cl", "<Plug>(coc-codelens-action)", opts)
 
-
         -- Map function and class text objects
         -- NOTE: Requires 'textDocument.documentSymbol' support from the language server
         keyset("x", "if", "<Plug>(coc-funcobj-i)", opts)
@@ -124,7 +114,6 @@ return {
         keyset("o", "ic", "<Plug>(coc-classobj-i)", opts)
         keyset("x", "ac", "<Plug>(coc-classobj-a)", opts)
         keyset("o", "ac", "<Plug>(coc-classobj-a)", opts)
-
 
         -- Remap <C-f> and <C-b> to scroll float windows/popups
         ---@diagnostic disable-next-line: redefined-local
@@ -137,13 +126,6 @@ return {
                'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', opts)
         keyset("v", "<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', opts)
         keyset("v", "<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', opts)
-
-
-        -- Use CTRL-S for selections ranges
-        -- Requires 'textDocument/selectionRange' support of language server
-        keyset("n", "<C-s>", "<Plug>(coc-range-select)", {silent = true})
-        keyset("x", "<C-s>", "<Plug>(coc-range-select)", {silent = true})
-
 
         -- Add `:Format` command to format current buffer
         vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
@@ -163,8 +145,6 @@ return {
         -- code actions and coc stuff
         ---@diagnostic disable-next-line: redefined-local
         local opts = {silent = true, nowait = true}
-        -- Show all diagnostics
-        keyset("n", "<space>a", ":<C-u>CocList diagnostics<cr>", opts)
         -- Manage extensions
         keyset("n", "<space>e", ":<C-u>CocList extensions<cr>", opts)
         -- Search workspace symbols

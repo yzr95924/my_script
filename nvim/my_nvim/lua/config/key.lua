@@ -46,45 +46,237 @@ local keys = {
     {
         -- for Telescope
         {"<leader>f", group = "Telescope"},
-        {"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files", noremap = true},
-        {"<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep", noremap = true},
-        {"<leader>fc", "<cmd>Telescope commands<cr>", desc = "List Commands", noremap = true},
-        {"<leader>fb", "<cmd>Telescope buffers<cr>", desc = "List Buffer", noremap = true},
+        {
+            "<leader>ff",
+            "<C-U><cmd>Telescope find_files<cr>",
+            desc = "Find Files",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>fg",
+            "<C-U><cmd>Telescope live_grep<cr>",
+            desc = "Live Grep",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>fc",
+            "<C-U><cmd>Telescope commands<cr>",
+            desc = "List Commands",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>fb",
+            "<C-U><cmd>Telescope buffers<cr>",
+            desc = "List Buffer",
+            noremap = true,
+            nowait = true,
+        },
     },
     {
         -- for Bufferline
         {"<leader>b", group = "Bufferline"},
-        {"<leader>bn", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer", noremap = true},
-        {"<leader>bp", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer", noremap = true},
-        {"<leader>bs", "<cmd>BufferLinePick<cr>", desc = "Pick Buffer", noremap = true},
-        {"<leader>bc", "<cmd>BufferLinePickClose<cr>", desc = "Close Buffer", noremap = true},
+        {
+            "<leader>bn",
+            "<C-U><cmd>BufferLineCycleNext<cr>",
+            desc = "Next Buffer",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>bp",
+            "<C-U><cmd>BufferLineCyclePrev<cr>",
+            desc = "Prev Buffer",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>bs",
+            "<C-U><cmd>BufferLinePick<cr>",
+            desc = "Pick Buffer",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>bc",
+            "<C-U><cmd>BufferLinePickClose<cr>",
+            desc = "Close Buffer",
+            noremap = true,
+            nowait = true,
+        },
     },
     {
         -- for Lsp Coc
         {"<leader>l", group = "Lsp Coc"},
-        {"<leader>ll", "<cmd>CocOutline<cr>", desc = "List Outline", noremap = true},
-        {"<leader>li", "<cmd>CocCommand document.showIncomingCalls<cr>", desc = "Show Incoming Calls", noremap = true},
-        {"<leader>lo", "<cmd>CocCommand document.showOutgoingCalls<cr>", desc = "Show Outgoing Calls", noremap = true},
+        {
+            "<leader>ll",
+            "<C-U><cmd>CocOutline<cr>",
+            desc = "List Outline",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>li",
+            "<C-U><cmd>CocCommand document.showIncomingCalls<cr>",
+            desc = "Show Incoming Calls",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>lo",
+            "<C-U><cmd>CocCommand document.showOutgoingCalls<cr>",
+            desc = "Show Outgoing Calls",
+            noremap = true,
+            nowait = true,
+        },
         -- Formatting selected code
-        {"<leader>lf", "<Plug>(coc-format-selected)", desc = "Format Selected Code", noremap = true, mode = {"n", "x"}},
+        {
+            "<leader>lf",
+            "<Plug>(coc-format-selected)",
+            desc = "Format Selected Code",
+            noremap = true,
+            nowait = true,
+            mode = {"n", "x"}
+        },
         -- Remap keys for apply refactor code actions.
-        {"<leader>le", "<Plug>(coc-codeaction-refactor)", desc = "Refactor", noremap = true, mode = {"n"}},
-        {"<leader>lr", "<Plug>(coc-codeaction-refactor-selected)", desc = "Refactor Selected Code", noremap = true, mode = {"n", "x"}},
-        {"<leader>lc", "<C-U><cmd>CocList commands<cr>", desc = "Show Commands", noremap = true, nowait = true, mode = {"n"}},
-        {"<leader>ls", "<C-U><cmd>CocList outline<cr>", desc = "List Symbol", noremap = true, nowait = true, mode = {"n"}},
+        {
+            "<leader>le",
+            "<Plug>(coc-codeaction-refactor)",
+            desc = "Refactor",
+            noremap = true,
+            nowait = true,
+            mode = {"n"}
+        },
+        {
+            "<leader>lr",
+            "<Plug>(coc-codeaction-refactor-selected)",
+            desc = "Refactor Selected Code",
+            noremap = true,
+            nowait = true,
+            mode = {"n", "x"}
+        },
+        -- Use CTRL-S for selections ranges
+        -- Requires 'textDocument/selectionRange' support of language server
+        {
+            "<leader>la",
+            "<Plug>(coc-range-select)",
+            desc = "Select Code Range",
+            noremap = true,
+            nowait = true,
+            silent = true,
+            mode = {"n", "x"}
+        },
+        {
+            "<leader>lc",
+            "<C-U><cmd>CocList commands<cr>",
+            desc = "Show Commands",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>ls",
+            "<C-U><cmd>CocList outline<cr>",
+            desc = "List Symbol",
+            noremap = true,
+            nowait = true,
+        },
+        -- Show all diagnostics
+        {
+            "<leader>ld",
+            "<C-U><cmd>CocList diagnostics<cr>",
+            desc = "Show All Diagnostics",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
+        -- GoTo code navigation
+        {
+            "gd",
+            "<Plug>(coc-definition)",
+            desc = "Go To Definition",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
+        {
+            "gy",
+            "<Plug>(coc-type-definition)",
+            desc = "Go To Type Definition",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
+        {
+            "gi",
+            "<Plug>(coc-implementation)",
+            desc = "Go To Implementation",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
+        {
+            "gr",
+            "<Plug>(coc-references)",
+            desc = "Go To References",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
     },
     {
         -- for NvimTree
         {"<leader>n", group = "NvimTree"},
-        {"<leader>no", "<C-U><cmd>NvimTreeToggle<cr>", desc = "Toggle Tree", noremap = true, nowait = true},
-        {"<leader>nc", "<C-U><cmd>NvimTreeCollapse<cr>", desc = "Toggle Tree Collapse", noremap = true, nowait = true},
+        {
+            "<leader>no",
+            "<C-U><cmd>NvimTreeToggle<cr>",
+            desc = "Toggle Tree",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>nc",
+            "<C-U><cmd>NvimTreeCollapse<cr>",
+            desc = "Toggle Tree Collapse",
+            noremap = true,
+            nowait = true,
+        },
     },
     {
         -- for Git
         {"<leader>g", group = "Git Tool"},
-        {"<leader>gd", "<C-U><cmd>DiffviewOpen HEAD<cr>", desc = "HEAD Diff Open", noremap = true, nowait = true},
-        {"<leader>gc", "<C-U><cmd>DiffviewClose<cr>", desc = "Diff Close", noremap = true, nowait = true},
-        {"<leader>gh", "<C-U><cmd>DiffviewFileHistory %<cr>", desc = "Show File History", noremap = true, nowait = true},
+        {
+            "<leader>gd",
+            "<C-U><cmd>DiffviewOpen HEAD<cr>",
+            desc = "HEAD Diff Open",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>gc",
+            "<C-U><cmd>DiffviewClose<cr>",
+            desc = "Diff Close",
+            noremap = true,
+            nowait = true,
+        },
+        {
+            "<leader>gh",
+            "<C-U><cmd>DiffviewFileHistory %<cr>",
+            desc = "Show Current File History",
+            noremap = true,
+            nowait = true,
+        },
+    },
+    {
+        -- editor
+        {
+            "<C-s>",
+            "<C-U><cmd>w<cr>",
+            desc = "Save File",
+            noremap = true,
+            nowait = true,
+        },
     }
 }
 
