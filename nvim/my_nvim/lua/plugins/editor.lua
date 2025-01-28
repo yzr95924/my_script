@@ -1,5 +1,6 @@
 return {
     {
+        -- https://github.com/windwp/nvim-autopairs
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         version = "*",
@@ -8,6 +9,7 @@ return {
         end
     },
     {
+        -- https://github.com/cappyzawa/trim.nvim
         "cappyzawa/trim.nvim",
         version = "*",
         config = function()
@@ -21,6 +23,7 @@ return {
         end
     },
     {
+        -- https://github.com/chentoast/marks.nvim
         "chentoast/marks.nvim",
         version = "*",
         config = function()

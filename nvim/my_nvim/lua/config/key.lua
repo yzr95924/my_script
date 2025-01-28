@@ -283,12 +283,21 @@ local keys = {
         },
         {"<leader>m", group = "Bookmark"},
         {
-            "<leader>ms",
-            "<Plug>(Marks-set)",
-            desc = "Set Marks",
+            "<leader>mt",
+            "<Plug>(Marks-toggle)",
+            desc = "Toggle Marks",
             noremap = true,
             nowait = true,
-        }
+            silent = true,
+        },
+        {
+            "<leader>ml",
+            "<cmd>MarksListAll<cr>",
+            desc = "List All Marks",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        },
     }
 }
 
