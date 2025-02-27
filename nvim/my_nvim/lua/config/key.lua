@@ -298,6 +298,14 @@ local keys = {
             nowait = true,
             silent = true,
         },
+        {
+            "<leader>md",
+            "<Plug>(Marks-deleteline)",
+            desc = "Delete Line Marks",
+            noremap = true,
+            nowait = true,
+            silent = true,
+        }
     }
 }
 
