@@ -1,3 +1,4 @@
+print("loading global options")
 local global = vim.g -- for vim global variables
 local o = vim.opt -- for vim options
 
